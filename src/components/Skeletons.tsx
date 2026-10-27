@@ -16,8 +16,16 @@ function Pulse({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const loop = Animated.loop(
       Animated.sequence([
-        Animated.timing(opacity, { toValue: 0.4, duration: 700, useNativeDriver: true }),
-        Animated.timing(opacity, { toValue: 1, duration: 700, useNativeDriver: true }),
+        Animated.timing(opacity, {
+          toValue: 0.4,
+          duration: 700,
+          useNativeDriver: true,
+        }),
+        Animated.timing(opacity, {
+          toValue: 1,
+          duration: 700,
+          useNativeDriver: true,
+        }),
       ]),
     );
     loop.start();
@@ -35,7 +43,10 @@ export function BannerSkeleton() {
     <Pulse>
       <View className="items-center bg-[#2a2727] pb-5 pt-20">
         <SkeletonBox className="mb-5 h-7 w-40 bg-white/15" />
-        <View style={{ width: cardWidth * 0.92, height: cardHeight }} className="rounded-2xl bg-white/15" />
+        <View
+          style={{ width: cardWidth * 0.92, height: cardHeight }}
+          className="rounded-2xl bg-white/15"
+        />
         <SkeletonBox className="mt-5 h-1 w-[80%]" />
       </View>
     </Pulse>
@@ -60,7 +71,10 @@ export function GridSkeleton() {
     <Pulse>
       <View className="flex-row flex-wrap justify-between gap-y-3">
         {[0, 1, 2, 3, 4, 5].map((index) => (
-          <SkeletonBox key={index} className="aspect-[2/3] w-[48.5%] rounded-md" />
+          <SkeletonBox
+            key={index}
+            className="aspect-[2/3] w-[48.5%] rounded-md"
+          />
         ))}
       </View>
     </Pulse>
@@ -71,7 +85,10 @@ export function DetailSkeleton() {
   const { height } = useWindowDimensions();
   return (
     <Pulse>
-      <View style={{ paddingTop: height * 0.4 }} className="bg-[#2a2727] px-4 pb-8">
+      <View
+        style={{ paddingTop: height * 0.4 }}
+        className="bg-[#2a2727] px-4 pb-8"
+      >
         <SkeletonBox className="h-10 w-2/3" />
         <SkeletonBox className="mt-3 h-6 w-1/3" />
         <View className="my-5 flex-row gap-2">

@@ -7,12 +7,18 @@ interface SectionTitleProps {
   viewAllHref?: Href; // có link thì hiện nút "Xem tất cả"
 }
 
-export default function SectionTitle({ title, viewAllHref }: SectionTitleProps) {
+export default function SectionTitle({
+  title,
+  viewAllHref,
+}: SectionTitleProps) {
   return (
     <View className="my-4 flex-row items-center justify-between">
       <View className="flex-1 flex-row items-center">
         <View className="mr-3 h-7 w-1 bg-brand" />
-        <Text className="flex-1 font-display text-xl uppercase text-white" numberOfLines={1}>
+        <Text
+          className="flex-1 font-display text-xl uppercase text-white"
+          numberOfLines={1}
+        >
           {title}
         </Text>
       </View>

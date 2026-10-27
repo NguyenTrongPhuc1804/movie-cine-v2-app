@@ -90,6 +90,18 @@ export default function HomeScreen() {
 
   return (
     <View className="flex-1 bg-page">
+      {/* Nền blur tĩnh cho toàn màn: một ảnh cố định, không đổi theo phim nên không re-render
+          khi banner autoplay. Scrim đậm để chữ/card vẫn đọc được. */}
+      <View pointerEvents="none" className="absolute inset-0 overflow-hidden">
+        <Image
+          source={require("@/assets/images/logo-ultra.png")}
+          contentFit="cover"
+          blurRadius={90}
+          className="absolute inset-0"
+        />
+        <View className="absolute inset-0 bg-black/88" />
+      </View>
+
       <ScrollView
         scrollEventThrottle={16}
         onScroll={(event) =>

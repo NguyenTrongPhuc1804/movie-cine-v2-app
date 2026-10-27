@@ -45,6 +45,7 @@
     "typescript": "~6.0.3"
   },
   "scripts": {
+    "connect": "adb connect 192.168.1.144:5555",
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",

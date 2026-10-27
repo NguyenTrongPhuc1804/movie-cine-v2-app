@@ -1,9 +1,10 @@
-// Tab bar nổi: thanh đặc bo góc, chỉ icon, scale nhẹ khi active
+// Tab bar floating gọn: chỉ icon, không chữ. Thanh co đúng bằng 4 slot cố định và căn giữa.
+// Slot rộng cố định nên pill active không đẩy icon khác; chỉ animate opacity + scale.
 
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useEffect } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -11,13 +12,16 @@ import Animated, {
   withTiming,
 } from "react-native-reanimated";
 
-const BRAND = "#b91c1c";
-const INACTIVE = "#9ca3af";
-// Đổi thành "#ffffff" nếu muốn thanh trắng giống hệt mẫu
-const BAR_BG = "#1f1d1d";
-const TAB_H = 64;
-const SIDE_PAD = 16;
-const BAR_MARGIN = 20;
+const BRAND = "#ef4444";
+const ICON_IDLE = "#d4d4d4";
+const BAR_BG = "#141212";
+const PILL_BG = "rgba(185,28,28,0.22)";
+const PILL_BORDER = "rgba(239,68,68,0.35)";
+const SLOT_W = 58;
+const TAB_H = 70;
+const PILL_INSET = 5;
+const BAR_PAD = 6;
+const BAR_MARGIN = 16;
 
 const ICONS: Record<
   string,
@@ -32,20 +36,14 @@ const ICONS: Record<
   favorites: { active: "heart", idle: "heart-outline" },
 };
 
-export default function FloatingTabBar({
-  state,
-  descriptors,
-  navigation,
-  insets,
-}: {
+type Props = {
   state: {
     index: number;
     routes: { key: string; name: string; params?: object }[];
   };
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   descriptors: Record<
     string,
-    { options: { title?: string; tabBarLabel?: any } }
+    { options: { title?: string; tabBarLabel?: unknown } }
   >;
   navigation: {
     emit: (event: {
@@ -56,83 +54,86 @@ export default function FloatingTabBar({
     navigate: (name: string, params?: object) => void;
   };
   insets: { bottom: number };
-}) {
-  const routes = state.routes;
+};
 
+export default function FloatingTabBar({
+  state,
+  descriptors,
+  navigation,
+  insets,
+}: Props) {
   return (
     <View
       pointerEvents="box-none"
       style={{
         position: "absolute",
-        left: BAR_MARGIN,
-        right: BAR_MARGIN,
+        left: 0,
+        right: 0,
         bottom: Math.max(insets.bottom, 12),
+        alignItems: "center",
       }}
     >
       <View
         style={{
+          flexDirection: "row",
           height: TAB_H,
-          borderRadius: 24,
+          paddingHorizontal: BAR_PAD,
+          borderRadius: TAB_H / 2,
           backgroundColor: BAR_BG,
+          borderWidth: 1,
+          borderColor: "rgba(255,255,255,0.08)",
           shadowColor: "#000",
-          shadowOpacity: 0.3,
-          shadowRadius: 14,
-          shadowOffset: { width: 0, height: 6 },
-          elevation: 10,
+          shadowOpacity: 0.5,
+          shadowRadius: 18,
+          shadowOffset: { width: 0, height: 8 },
+          elevation: 14,
         }}
       >
-        <View
-          className="flex-1 flex-row items-center"
-          style={{ paddingHorizontal: SIDE_PAD }}
-        >
-          {routes.map((route, index) => {
-            const { options } = descriptors[route.key];
-            const label =
-              typeof options.tabBarLabel === "string"
-                ? options.tabBarLabel
-                : typeof options.title === "string"
-                  ? options.title
-                  : route.name;
-            const focused = state.index === index;
-            const icons = ICONS[route.name] ?? {
-              active: "ellipse",
-              idle: "ellipse-outline",
-            };
+        {state.routes.map((route, index) => {
+          const { options } = descriptors[route.key];
+          const label =
+            typeof options.tabBarLabel === "string"
+              ? options.tabBarLabel
+              : typeof options.title === "string"
+                ? options.title
+                : route.name;
+          const focused = state.index === index;
+          const icons = ICONS[route.name] ?? {
+            active: "ellipse",
+            idle: "ellipse-outline",
+          };
 
-            const onPress = () => {
-              const event = navigation.emit({
-                type: "tabPress",
-                target: route.key,
-                canPreventDefault: true,
-              });
-              if (!focused && !event.defaultPrevented) {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(
-                  () => undefined,
-                );
-                navigation.navigate(route.name, route.params);
+          const onPress = () => {
+            const event = navigation.emit({
+              type: "tabPress",
+              target: route.key,
+              canPreventDefault: true,
+            });
+            if (!focused && !event.defaultPrevented) {
+              Haptics.selectionAsync().catch(() => undefined);
+              navigation.navigate(route.name, route.params);
+            }
+          };
+
+          return (
+            <TabButton
+              key={route.key}
+              label={label}
+              focused={focused}
+              icon={focused ? icons.active : icons.idle}
+              onPress={onPress}
+              onLongPress={() =>
+                navigation.emit({ type: "tabLongPress", target: route.key })
               }
-            };
-
-            return (
-              <TabItem
-                key={route.key}
-                label={label}
-                focused={focused}
-                icon={focused ? icons.active : icons.idle}
-                onPress={onPress}
-                onLongPress={() =>
-                  navigation.emit({ type: "tabLongPress", target: route.key })
-                }
-              />
-            );
-          })}
-        </View>
+            />
+          );
+        })}
       </View>
     </View>
   );
 }
 
-function TabItem({
+function TabButton({
   label,
   focused,
   icon,
@@ -145,17 +146,23 @@ function TabItem({
   onPress: () => void;
   onLongPress: () => void;
 }) {
-  const scale = useSharedValue(focused ? 1.15 : 1);
+  const p = useSharedValue(focused ? 1 : 0);
 
   useEffect(() => {
-    scale.value = withTiming(focused ? 1.15 : 1, {
-      duration: 140,
+    p.value = withTiming(focused ? 1 : 0, {
+      duration: 170,
       easing: Easing.out(Easing.cubic),
     });
-  }, [focused, scale]);
+  }, [focused, p]);
+
+  // Chỉ đổi opacity + scale trong slot cố định -> không đẩy icon khác, thanh không đổi dài
+  const pillStyle = useAnimatedStyle(() => ({
+    opacity: p.value,
+    transform: [{ scale: 0.9 + p.value * 0.1 }],
+  }));
 
   const iconStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: scale.value }],
+    transform: [{ scale: 1 + p.value * 0.08 }],
   }));
 
   return (
@@ -165,18 +172,35 @@ function TabItem({
       accessibilityLabel={label}
       onPress={onPress}
       onLongPress={onLongPress}
-      className="flex-1 items-center justify-center gap-1"
+      android_ripple={{ color: "rgba(255,255,255,0.06)", borderless: true }}
+      style={{
+        width: SLOT_W,
+        height: TAB_H - PILL_INSET * 2,
+        marginVertical: PILL_INSET,
+        alignItems: "center",
+        justifyContent: "center",
+      }}
     >
+      <Animated.View
+        pointerEvents="none"
+        style={[
+          {
+            position: "absolute",
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            borderRadius: 999,
+            backgroundColor: PILL_BG,
+            borderWidth: 1,
+            borderColor: PILL_BORDER,
+          },
+          pillStyle,
+        ]}
+      />
       <Animated.View style={iconStyle}>
-        <Ionicons name={icon} size={22} color={focused ? BRAND : INACTIVE} />
+        <Ionicons name={icon} size={22} color={focused ? BRAND : ICON_IDLE} />
       </Animated.View>
-      <Text
-        className="text-[10px] font-semibold"
-        style={{ color: focused ? BRAND : INACTIVE }}
-        numberOfLines={1}
-      >
-        {label}
-      </Text>
     </Pressable>
   );
 }

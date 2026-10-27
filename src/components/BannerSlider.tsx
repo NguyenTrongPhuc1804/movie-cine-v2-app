@@ -1,7 +1,7 @@
 // Banner triple slider: poster dọc giữa nổi, info trong card + progress + autoplay
 
+import type { FilmDetail } from "@/types/movie";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Image } from "expo-image";
 import { Pressable, Text, useWindowDimensions, View } from "react-native";
 import Animated, {
   cancelAnimation,
@@ -15,8 +15,6 @@ import Animated, {
 } from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import BannerCard from "./BannerCard";
-import { imageSource } from "@/lib/utils";
-import type { FilmDetail } from "@/types/movie";
 
 const AUTOPLAY_DELAY = 8000;
 const CARD_RATIO = 0.55;
@@ -41,8 +39,15 @@ function ProgressSegment({
   });
 
   return (
-    <Pressable onPress={onPress} hitSlop={8} className="h-1 flex-1 overflow-hidden rounded-full bg-white/25">
-      <Animated.View className="h-full rounded-full bg-brand" style={fillStyle} />
+    <Pressable
+      onPress={onPress}
+      hitSlop={8}
+      className="h-1 flex-1 overflow-hidden rounded-full bg-white/25"
+    >
+      <Animated.View
+        className="h-full rounded-full bg-brand"
+        style={fillStyle}
+      />
     </Pressable>
   );
 }
@@ -62,11 +67,13 @@ export default function BannerSlider({ films }: { films: FilmDetail[] }) {
   const cardWidth = width * CARD_RATIO;
   const cardHeight = cardWidth * CARD_ASPECT;
   const sidePad = (width - cardWidth) / 2;
-  const activeFilm = films[index] ?? films[0];
 
   const goTo = useCallback(
     (next: number) => {
-      listRef.current?.scrollToOffset({ offset: next * cardWidth, animated: true });
+      listRef.current?.scrollToOffset({
+        offset: next * cardWidth,
+        animated: true,
+      });
       indexRef.current = next;
       setIndex(next);
     },
@@ -74,7 +81,8 @@ export default function BannerSlider({ films }: { films: FilmDetail[] }) {
   );
 
   const advance = useCallback(() => {
-    const next = indexRef.current + 1 >= films.length ? 0 : indexRef.current + 1;
+    const next =
+      indexRef.current + 1 >= films.length ? 0 : indexRef.current + 1;
     goTo(next);
   }, [films.length, goTo]);
 
@@ -82,9 +90,13 @@ export default function BannerSlider({ films }: { films: FilmDetail[] }) {
     if (films.length <= 1) return;
     cancelAnimation(progress);
     progress.value = 0;
-    progress.value = withTiming(1, { duration: AUTOPLAY_DELAY, easing: Easing.linear }, (finished) => {
-      if (finished) runOnJS(advance)();
-    });
+    progress.value = withTiming(
+      1,
+      { duration: AUTOPLAY_DELAY, easing: Easing.linear },
+      (finished) => {
+        if (finished) runOnJS(advance)();
+      },
+    );
     return () => cancelAnimation(progress);
   }, [index, films.length, progress, advance]);
 
@@ -101,18 +113,8 @@ export default function BannerSlider({ films }: { films: FilmDetail[] }) {
 
   return (
     <View style={{ paddingTop: insets.top + 56, paddingBottom: 20 }}>
-      {/* Nền blur: clip riêng để không cắt card hai bên của carousel */}
-      <View className="absolute inset-0 overflow-hidden">
-        <Image
-          key={activeFilm.slug}
-          source={imageSource(activeFilm.thumb_url || activeFilm.poster_url)}
-          contentFit="cover"
-          blurRadius={48}
-          transition={450}
-          className="absolute inset-0"
-        />
-        <View className="absolute inset-0 bg-black/65" />
-      </View>
+      {/* Nền blur đã chuyển lên HomeScreen (một ảnh tĩnh dùng cho cả màn),
+          ở đây để trong suốt cho nền đó lộ qua -> banner và phần dưới cùng một hệ nền. */}
 
       <Text className="mb-5 px-6 text-center font-display text-2xl uppercase tracking-wide text-white">
         Phim <Text className="text-brand">Mới</Text>
@@ -133,9 +135,15 @@ export default function BannerSlider({ films }: { films: FilmDetail[] }) {
         contentContainerStyle={{ paddingHorizontal: sidePad }}
         scrollEventThrottle={16}
         onScroll={onScroll}
-        getItemLayout={(_, i) => ({ length: cardWidth, offset: cardWidth * i, index: i })}
+        getItemLayout={(_, i) => ({
+          length: cardWidth,
+          offset: cardWidth * i,
+          index: i,
+        })}
         onMomentumScrollEnd={(event) => {
-          const next = Math.round(event.nativeEvent.contentOffset.x / cardWidth);
+          const next = Math.round(
+            event.nativeEvent.contentOffset.x / cardWidth,
+          );
           const clamped = Math.max(0, Math.min(next, films.length - 1));
           indexRef.current = clamped;
           setIndex(clamped);
@@ -153,12 +161,15 @@ export default function BannerSlider({ films }: { films: FilmDetail[] }) {
         extraData={centerIndex}
         // Thứ tự lớp phải đặt trên cell; elevation cần cho Android
         CellRendererComponentStyle={({ index: cellIndex }) => {
-          const layer = cellIndex === centerIndex ? 100 : 10 - Math.abs(cellIndex - centerIndex);
+          const layer =
+            cellIndex === centerIndex
+              ? 100
+              : 10 - Math.abs(cellIndex - centerIndex);
           return { zIndex: layer, elevation: layer };
         }}
       />
 
-      <View className="mt-5 flex-row gap-1.5 px-8">
+      {/* <View className="mt-5 flex-row gap-1.5 px-8">
         {films.map((film, segmentIndex) => (
           <ProgressSegment
             key={film.slug}
@@ -168,7 +179,7 @@ export default function BannerSlider({ films }: { films: FilmDetail[] }) {
             onPress={() => goTo(segmentIndex)}
           />
         ))}
-      </View>
+      </View> */}
     </View>
   );
 }
