@@ -1,42 +1,54 @@
 {
   "expo": {
-    "name": "moviecine-app",
+    "name": "Cineflexx",
     "slug": "moviecine-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "moviecineapp",
-    "userInterfaceStyle": "automatic",
+    "icon": "./assets/images/cineflexx_logo_netflix_inspired.png",
+    "scheme": "cineflexx",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#181616",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "bundleIdentifier": "com.cineflexx.app"
     },
     "android": {
+      "package": "com.cineflexx.app",
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "backgroundColor": "#181616",
+        "foregroundImage": "./assets/images/cineflexx_logo_netflix_inspired.png"
       },
       "predictiveBackGestureEnabled": false
     },
     "web": {
+      "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/cineflexx_logo_netflix_inspired.png"
     },
     "plugins": [
       "expo-router",
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#208AEF",
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76
+          "backgroundColor": "#181616",
+          "image": "./assets/images/cineflexx_logo_netflix_inspired.png",
+          "imageWidth": 220
         }
       ]
     ],
     "experiments": {
-      "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "2698678d-1d8c-4ba8-83aa-84a2410b1af0"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/2698678d-1d8c-4ba8-83aa-84a2410b1af0"
     }
   }
 }

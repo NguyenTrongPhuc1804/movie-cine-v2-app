@@ -1,56 +1,71 @@
-# Welcome to your Expo app 👋
+# Cineflexx App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+App xem phim viết bằng **Expo + React Native**, chuyển từ bản web `moviecine-next`.
+Giao diện style bằng **NativeWind** nên `className` viết giống Tailwind bên web.
 
-## Get started
-
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Chạy dự án
 
 ```bash
-npm run reset-project
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Quét mã QR bằng app **Expo Go** (SDK 57) trên điện thoại, hoặc bấm `a` (Android emulator) / `i` (iOS simulator).
 
-### Other setup steps
+Đổi nguồn API (không bắt buộc): tạo file `.env.local` theo mẫu `.env.example`.
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+Kiểm tra code trước khi commit:
 
-## Learn more
+```bash
+npx tsc --noEmit
+npx expo lint
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+## Cấu trúc thư mục
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```
+src/
+  app/                     Màn hình. Mỗi file = 1 đường dẫn (expo-router, giống app/ của Next.js)
+    _layout.tsx            Khung ngoài cùng: font, giao diện tối, Stack điều hướng
+    (tabs)/                4 tab dưới cùng
+      index.tsx            Trang chủ: banner, Tiếp tục xem, các hàng phim
+      browse.tsx           Khám phá: danh sách, thể loại, quốc gia
+      search.tsx           Tìm kiếm
+      favorites.tsx        Phim yêu thích
+    phim/[name].tsx              Chi tiết phim        (web: /phim/[name])
+    phim/xem/[name].tsx          Xem phim             (web: /phim/xem/[name])
+    phim/list/[catg].tsx         Danh sách / thể loại (web: /phim/list/[catg])
+    phim/list/country/[ctry].tsx Quốc gia             (web: /phim/list/country/[ctry])
+  components/              Component dùng chung (FilmCard, FilmSlider, VideoPlayer...)
+  hooks/useApi.ts          Gọi API trong màn hình: data / loading / error / reload
+  lib/
+    api.ts                 Các hàm gọi API (có cache trong bộ nhớ)
+    apiPath.ts             Đường dẫn API
+    movieAdapter.ts        Chuyển JSON của API thành kiểu trong types/movie.ts
+    localStore.ts          Lưu lịch sử xem, yêu thích vào máy (AsyncStorage)
+    lists.ts               Tên các danh sách phim (Phim lẻ, Phim bộ...)
+    utils.ts               Hàm tiện ích nhỏ
+    config.ts              Cấu hình chung
+    nativewind.ts          Cho phép dùng className với Image, LinearGradient, WebView
+  types/movie.ts           Kiểu dữ liệu (giống bản web)
+```
 
-## Join the community
+## Khác biệt so với bản web
 
-Join our community of developers creating universal apps.
+| Web (Next.js)                 | App (React Native)                           |
+| ----------------------------- | -------------------------------------------- |
+| `<div>`, `<p>`, `<img>`       | `<View>`, `<Text>`, `<Image>` (expo-image)   |
+| `<Link>` của next/link        | `<Link>` của expo-router                     |
+| `localStorage`                | `AsyncStorage` (lib/localStore.ts)           |
+| `<iframe>` phát phim          | `<WebView>` (react-native-webview)           |
+| Swiper                        | `FlatList` ngang                             |
+| Server Component + Suspense   | Hook `useApi` + Skeleton                     |
+| `hover:`                      | `active:` (khi đang bấm)                     |
+| Menu Header                   | Thanh tab dưới cùng                          |
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Ghi chú khi viết code
+
+- Chữ phải nằm trong `<Text>`, không đặt chữ trực tiếp trong `<View>`.
+- Màu và font riêng khai báo trong `tailwind.config.js`: `bg-page`, `bg-card`, `bg-bar`, `bg-brand`, `bg-steel`, `font-display`, `font-semibold`.
+- Thêm màn hình mới: tạo file trong `src/app/`, tên file chính là đường dẫn.
+- Thêm API mới: viết đường dẫn ở `lib/apiPath.ts`, hàm gọi ở `lib/api.ts`, chuyển dữ liệu ở `lib/movieAdapter.ts`.
