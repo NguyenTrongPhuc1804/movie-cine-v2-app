@@ -12,7 +12,7 @@ export default function FavoritesScreen() {
 
   return (
     <FlatList
-      className="flex-1 bg-page"
+      className="flex-1"
       contentContainerClassName="px-4 pb-28"
       contentContainerStyle={{ gap: 12 }}
       columnWrapperClassName="justify-between"

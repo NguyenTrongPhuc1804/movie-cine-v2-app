@@ -28,7 +28,7 @@ export default function FavoriteButton({ film, showText = false }: FavoriteButto
         onPress={() => toggleFavorite(film)}
         accessibilityLabel={label}
         hitSlop={8}
-        className="absolute right-2 top-2 z-20 rounded-full bg-black/60 p-2 active:bg-black/90"
+        className="absolute right-2 top-2 z-20 rounded-full border border-white/15 bg-black/45 p-2 active:bg-black/70"
       >
         {icon}
       </Pressable>

@@ -43,35 +43,36 @@ export default function ContinueWatching() {
         renderItem={({ item }) => (
           <View
             style={{ width: cardWidth }}
-            className="aspect-[2/3] overflow-hidden rounded-md"
+            className="aspect-[2/3] overflow-hidden rounded-2xl border border-white/10 bg-card"
           >
             <Link
               href={`/phim/xem/${item.slug}?server=${item.server}&tap=${item.tap}`}
               asChild
             >
-              <Pressable className="flex-1 active:opacity-80">
+              <Pressable className="flex-1 active:opacity-90">
                 <Image
                   source={imageSource(item.thumb_url)}
                   contentFit="cover"
                   className="absolute inset-0"
                 />
                 <LinearGradient
-                  colors={["transparent", "rgba(17,24,39,0.95)"]}
+                  colors={["transparent", "rgba(0,0,0,0.72)", "rgba(0,0,0,0.92)"]}
+                  locations={[0.35, 0.72, 1]}
                   className="absolute inset-0"
                 />
                 <View className="absolute inset-0 items-center justify-center">
-                  <View className="rounded-full bg-red-600/90 p-4">
+                  <View className="rounded-full border border-white/20 bg-red-600/90 p-4">
                     <Ionicons name="play" size={18} color="white" />
                   </View>
                 </View>
-                <View className="absolute bottom-0 w-full p-2">
+                <View className="absolute bottom-0 w-full p-2.5">
                   <Text
-                    className="font-display text-sm text-white"
+                    className="font-display text-sm leading-tight text-white"
                     numberOfLines={2}
                   >
                     {item.name}
                   </Text>
-                  <Text className="text-xs text-red-400">
+                  <Text className="mt-0.5 text-xs text-red-400">
                     Đang xem: Tập {item.episodeName}
                   </Text>
                 </View>
@@ -82,7 +83,7 @@ export default function ContinueWatching() {
               onPress={() => removeHistory(item.slug)}
               accessibilityLabel={`Xoá ${item.name} khỏi lịch sử`}
               hitSlop={8}
-              className="absolute right-2 top-2 rounded-full bg-black/60 p-2 active:bg-black/90"
+              className="absolute right-2 top-2 rounded-full border border-white/15 bg-black/45 p-2 active:bg-black/70"
             >
               <Ionicons name="close" size={16} color="white" />
             </Pressable>

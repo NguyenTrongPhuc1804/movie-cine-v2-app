@@ -59,7 +59,7 @@ export function RowSkeleton() {
       <SkeletonBox className="my-4 h-7 w-48 bg-white/15" />
       <View className="flex-row gap-3 overflow-hidden">
         {[0, 1, 2].map((index) => (
-          <SkeletonBox key={index} className="aspect-[2/3] w-36 rounded-md" />
+          <SkeletonBox key={index} className="aspect-[2/3] w-36 rounded-2xl" />
         ))}
       </View>
     </Pulse>
@@ -73,7 +73,7 @@ export function GridSkeleton() {
         {[0, 1, 2, 3, 4, 5].map((index) => (
           <SkeletonBox
             key={index}
-            className="aspect-[2/3] w-[48.5%] rounded-md"
+            className="aspect-[2/3] w-[48.5%] rounded-2xl"
           />
         ))}
       </View>

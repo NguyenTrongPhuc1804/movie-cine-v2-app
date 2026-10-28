@@ -15,7 +15,7 @@ import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
 import { useState } from "react";
-import { Pressable, ScrollView, View } from "react-native";
+import { Pressable, RefreshControl, ScrollView, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 // Số phim mới nhất đưa lên banner
@@ -69,9 +69,9 @@ function HomeHeader({ solid }: { solid: boolean }) {
       )}
       <View className="flex-row items-center justify-between px-4 py-3">
         <Image
-          source={require("@/assets/images/cineflexx_logo_netflix_inspired.png")}
+          source={require("@/assets/images/logo-ultra.png")}
           contentFit="contain"
-          className="h-12 w-12 rounded-md"
+          className="h-12 w-12 rounded-xl"
         />
         <Link href="/search" asChild>
           <Pressable hitSlop={10} accessibilityLabel="Tìm kiếm">
@@ -87,25 +87,29 @@ export default function HomeScreen() {
   const [scrolled, setScrolled] = useState(false);
   const banner = useApi(loadBannerFilms, []);
   const sections = useApi(loadSections, []);
+  const refreshing = banner.loading || sections.loading;
+
+  const onRefresh = () => {
+    banner.reload();
+    sections.reload();
+  };
 
   return (
-    <View className="flex-1 bg-page">
-      {/* Nền blur tĩnh cho toàn màn: một ảnh cố định, không đổi theo phim nên không re-render
-          khi banner autoplay. Scrim đậm để chữ/card vẫn đọc được. */}
-      <View pointerEvents="none" className="absolute inset-0 overflow-hidden">
-        <Image
-          source={require("@/assets/images/logo-ultra.png")}
-          contentFit="cover"
-          blurRadius={90}
-          className="absolute inset-0"
-        />
-        <View className="absolute inset-0 bg-black/88" />
-      </View>
-
+    <View className="flex-1">
       <ScrollView
         scrollEventThrottle={16}
         onScroll={(event) =>
           setScrolled(event.nativeEvent.contentOffset.y > 24)
+        }
+        // Kéo xuống khi đang ở đầu trang để tải lại banner + danh sách
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#ef4444"
+            colors={["#ef4444"]}
+            progressBackgroundColor="#141212"
+          />
         }
       >
         {banner.data ? (

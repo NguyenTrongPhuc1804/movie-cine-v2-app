@@ -24,7 +24,7 @@ export default function SearchScreen() {
 
   if (!keyword) {
     return (
-      <View className="flex-1 bg-page px-4">
+      <View className="flex-1 px-4">
         {searchBox}
         <Text className="mt-6 text-center text-gray-400">Nhập tên phim tiếng Việt hoặc tên gốc để tìm kiếm.</Text>
       </View>

@@ -2,14 +2,12 @@
 
 import type { FilmDetail } from "@/types/movie";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Pressable, Text, useWindowDimensions, View } from "react-native";
+import { Text, useWindowDimensions, View } from "react-native";
 import Animated, {
   cancelAnimation,
   Easing,
   runOnJS,
-  SharedValue,
   useAnimatedScrollHandler,
-  useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
@@ -19,38 +17,6 @@ import BannerCard from "./BannerCard";
 const AUTOPLAY_DELAY = 8000;
 const CARD_RATIO = 0.55;
 const CARD_ASPECT = 1.5;
-
-function ProgressSegment({
-  segmentIndex,
-  activeIndex,
-  progress,
-  onPress,
-}: {
-  segmentIndex: number;
-  activeIndex: number;
-  progress: SharedValue<number>;
-  onPress: () => void;
-}) {
-  const fillStyle = useAnimatedStyle(() => {
-    let fill = 0;
-    if (segmentIndex < activeIndex) fill = 1;
-    else if (segmentIndex === activeIndex) fill = progress.value;
-    return { width: `${fill * 100}%` };
-  });
-
-  return (
-    <Pressable
-      onPress={onPress}
-      hitSlop={8}
-      className="h-1 flex-1 overflow-hidden rounded-full bg-white/25"
-    >
-      <Animated.View
-        className="h-full rounded-full bg-brand"
-        style={fillStyle}
-      />
-    </Pressable>
-  );
-}
 
 export default function BannerSlider({ films }: { films: FilmDetail[] }) {
   const { width } = useWindowDimensions();
@@ -168,18 +134,6 @@ export default function BannerSlider({ films }: { films: FilmDetail[] }) {
           return { zIndex: layer, elevation: layer };
         }}
       />
-
-      {/* <View className="mt-5 flex-row gap-1.5 px-8">
-        {films.map((film, segmentIndex) => (
-          <ProgressSegment
-            key={film.slug}
-            segmentIndex={segmentIndex}
-            activeIndex={index}
-            progress={progress}
-            onPress={() => goTo(segmentIndex)}
-          />
-        ))}
-      </View> */}
     </View>
   );
 }

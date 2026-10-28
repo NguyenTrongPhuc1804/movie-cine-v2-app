@@ -4,25 +4,28 @@
     "slug": "moviecine-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/cineflexx_logo_netflix_inspired.png",
+    "icon": "./assets/images/logo-ultra.png",
     "scheme": "cineflexx",
     "userInterfaceStyle": "dark",
     "backgroundColor": "#181616",
     "ios": {
-      "bundleIdentifier": "com.cineflexx.app"
+      "bundleIdentifier": "com.cineflexx.app",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.cineflexx.app",
       "adaptiveIcon": {
         "backgroundColor": "#181616",
-        "foregroundImage": "./assets/images/cineflexx_logo_netflix_inspired.png"
+        "foregroundImage": "./assets/images/logo-ultra.png"
       },
       "predictiveBackGestureEnabled": false
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/images/cineflexx_logo_netflix_inspired.png"
+      "favicon": "./assets/images/logo-ultra.png"
     },
     "plugins": [
       "expo-router",
@@ -30,7 +33,7 @@
         "expo-splash-screen",
         {
           "backgroundColor": "#181616",
-          "image": "./assets/images/cineflexx_logo_netflix_inspired.png",
+          "image": "./assets/images/logo-ultra.png",
           "imageWidth": 220
         }
       ]

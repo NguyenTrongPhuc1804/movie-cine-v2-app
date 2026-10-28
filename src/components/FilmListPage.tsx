@@ -62,7 +62,7 @@ export default function FilmListPage({ listKey, title, load, header, filterable 
   return (
     <FlatList
       ref={listRef}
-      className="flex-1 bg-page"
+      className="flex-1"
       contentContainerClassName="px-4 pb-28"
       columnWrapperClassName="justify-between"
       contentContainerStyle={{ gap: 12 }}
@@ -70,6 +70,9 @@ export default function FilmListPage({ listKey, title, load, header, filterable 
       numColumns={2}
       keyExtractor={(film) => film.slug}
       keyboardShouldPersistTaps="handled"
+      // Kéo xuống ở đầu danh sách để tải lại trang hiện tại
+      refreshing={loading}
+      onRefresh={reload}
       ListHeaderComponent={listHeader}
       renderItem={({ item }) => <FilmCard film={item} className="w-[48.5%]" />}
       ListFooterComponent={

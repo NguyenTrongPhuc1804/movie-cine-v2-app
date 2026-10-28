@@ -15,7 +15,7 @@ export default function TabsLayout() {
         headerStyle: { backgroundColor: "#121212" },
         headerTintColor: "#ffffff",
         headerTitleStyle: { fontFamily: "BeVietnamPro_700Bold" },
-        sceneStyle: { backgroundColor: "#181616" },
+        sceneStyle: { backgroundColor: "transparent" },
         tabBarStyle: {
           position: "absolute",
           backgroundColor: "transparent",

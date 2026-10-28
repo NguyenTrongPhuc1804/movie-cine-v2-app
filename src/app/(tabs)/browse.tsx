@@ -1,7 +1,7 @@
 // Khám phá: danh sách phim, thể loại, quốc gia (bên web nằm trên menu Header và 2 dropdown)
 
 import { Link } from "expo-router";
-import { Pressable, ScrollView, Text, View } from "react-native";
+import { Pressable, RefreshControl, ScrollView, Text, View } from "react-native";
 import ErrorView from "@/components/ErrorView";
 import SectionTitle from "@/components/SectionTitle";
 import { RowSkeleton } from "@/components/Skeletons";
@@ -27,15 +27,27 @@ function MenuChips({ items, basePath }: { items: MenuItem[]; basePath: string })
 }
 
 export default function BrowseScreen() {
-  const { data, error, reload } = useApi(loadMenus, []);
+  const { data, loading, error, reload } = useApi(loadMenus, []);
 
   return (
-    <ScrollView className="flex-1 bg-page" contentContainerClassName="px-4 pb-28">
+    <ScrollView
+      className="flex-1"
+      contentContainerClassName="px-4 pb-28"
+      refreshControl={
+        <RefreshControl
+          refreshing={loading}
+          onRefresh={reload}
+          tintColor="#ef4444"
+          colors={["#ef4444"]}
+          progressBackgroundColor="#141212"
+        />
+      }
+    >
       <SectionTitle title="Danh sách phim" />
       <View className="flex-row flex-wrap justify-between gap-y-3">
         {Object.entries(LIST_TITLES).map(([slug, title]) => (
           <Link key={slug} href={`/phim/list/${slug}`} asChild>
-            <Pressable className="w-[48.5%] items-center rounded-md bg-brand py-4 active:opacity-80">
+            <Pressable className="w-[48.5%] items-center rounded-xl border border-white/10 bg-brand py-4 active:opacity-80">
               <Text className="font-display text-base text-white">{title}</Text>
             </Pressable>
           </Link>

@@ -8,6 +8,8 @@ import { BeVietnamPro_600SemiBold, BeVietnamPro_700Bold, useFonts } from "@expo-
 import { DarkTheme, Stack, ThemeProvider } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
+import { View } from "react-native";
+import BlurBackground from "@/components/BlurBackground";
 
 // Giữ màn hình chờ cho tới khi nạp xong font, tránh chữ bị đổi font giữa chừng
 SplashScreen.preventAutoHideAsync();
@@ -30,19 +32,24 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={theme}>
       <StatusBar style="light" />
-      <Stack
-        screenOptions={{
-          headerStyle: { backgroundColor: "#121212" },
-          headerTintColor: "#ffffff",
-          headerTitleStyle: { fontFamily: "BeVietnamPro_700Bold" },
-          headerBackButtonDisplayMode: "minimal",
-          contentStyle: { backgroundColor: "#181616" },
-        }}
-      >
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        {/* Màn chi tiết: header trong suốt nằm đè lên poster */}
-        <Stack.Screen name="phim/[name]" options={{ headerTransparent: true, title: "" }} />
-      </Stack>
+      {/* Nền blur dùng chung: mọi màn khai báo contentStyle/sceneStyle transparent sẽ lộ nền này.
+          Màn hình cần nền đục (chi tiết phim, trình phát) tự giữ bg-page. */}
+      <View className="flex-1 bg-page">
+        <BlurBackground />
+        <Stack
+          screenOptions={{
+            headerStyle: { backgroundColor: "#121212" },
+            headerTintColor: "#ffffff",
+            headerTitleStyle: { fontFamily: "BeVietnamPro_700Bold" },
+            headerBackButtonDisplayMode: "minimal",
+            contentStyle: { backgroundColor: "transparent" },
+          }}
+        >
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          {/* Màn chi tiết: header trong suốt nằm đè lên poster */}
+          <Stack.Screen name="phim/[name]" options={{ headerTransparent: true, title: "" }} />
+        </Stack>
+      </View>
     </ThemeProvider>
   );
 }

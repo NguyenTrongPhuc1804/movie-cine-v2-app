@@ -18,10 +18,9 @@ const BAR_BG = "#141212";
 const PILL_BG = "rgba(185,28,28,0.22)";
 const PILL_BORDER = "rgba(239,68,68,0.35)";
 const SLOT_W = 58;
-const TAB_H = 70;
+const TAB_H = 56;
 const PILL_INSET = 5;
 const BAR_PAD = 6;
-const BAR_MARGIN = 16;
 
 const ICONS: Record<
   string,
