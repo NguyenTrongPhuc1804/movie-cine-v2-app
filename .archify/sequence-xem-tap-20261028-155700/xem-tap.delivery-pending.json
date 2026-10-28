@@ -1,8 +1,0 @@
-{
-  "schemaVersion": 1,
-  "command": "deliver",
-  "status": "pending",
-  "receiptId": "523602d3-afb9-4f46-8037-4a352cdce0f6",
-  "input": "D:\\Source-code\\WEB\\FE\\MovieCineflexx\\moviecine-app\\.archify\\sequence-xem-tap-20261028-155700\\candidate.json",
-  "output": "D:\\Source-code\\WEB\\FE\\MovieCineflexx\\moviecine-app\\.archify\\sequence-xem-tap-20261028-155700\\xem-tap.html"
-}

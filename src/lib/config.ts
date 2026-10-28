@@ -4,6 +4,9 @@ export const API_DOMAIN = process.env.EXPO_PUBLIC_API_DOMAIN || "https://vsmov.c
 
 export const SITE_NAME = "Cineflexx";
 
+// Địa chỉ web của phim, dùng khi chia sẻ link và làm trang nguồn cho iframe Youtube
+export const SITE_URL = "https://www.cineflexx.site";
+
 // Ảnh dùng khi phim không có ảnh (API đôi khi trả về {} thay vì link)
 export const NO_IMAGE = require("@/assets/images/no-image.png");
 

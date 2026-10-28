@@ -17,6 +17,7 @@ import {
   toFilmSummary,
 } from "@/lib/movieAdapter";
 import { getParam, imageSource } from "@/lib/utils";
+import { SITE_URL } from "@/lib/config";
 import type { Film, FilmDetail } from "@/types/movie";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
@@ -25,6 +26,7 @@ import { useRef, useState } from "react";
 import {
   Pressable,
   ScrollView,
+  Share,
   Text,
   useWindowDimensions,
   View,
@@ -150,6 +152,16 @@ function FilmDetailContent({
               onPress={() =>
                 scrollRef.current?.scrollTo({ y: trailerY, animated: true })
               }
+            />
+            <Button
+              text="Chia sẻ"
+              color="bg-steel"
+              icon="share-social"
+              onPress={() => {
+                void Share.share({
+                  message: `Xem phim ${film.name} tại ${SITE_URL}/phim/${film.slug}`,
+                });
+              }}
             />
             <FavoriteButton film={toFilmSummary(film)} showText />
           </View>

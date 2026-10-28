@@ -1,10 +1,9 @@
 // Phát trailer Youtube ngay trong app (bản web dùng <iframe>)
 
 import { WebView } from "react-native-webview";
+import { SITE_URL } from "@/lib/config";
 
-// Youtube chặn video nhúng không có trang nguồn (lỗi 153), nên gắn trang nguồn là web Cineflexx
-const PAGE_URL = "https://www.cineflexx.site";
-
+// Youtube chặn video nhúng không có trang nguồn (lỗi 153), nên baseUrl phải là web Cineflexx
 export default function TrailerPlayer({ youtubeId }: { youtubeId: string }) {
   const html = `
     <html>
@@ -21,7 +20,7 @@ export default function TrailerPlayer({ youtubeId }: { youtubeId: string }) {
 
   return (
     <WebView
-      source={{ html, baseUrl: PAGE_URL }}
+      source={{ html, baseUrl: SITE_URL }}
       className="aspect-video w-full bg-black"
       allowsFullscreenVideo
       allowsInlineMediaPlayback
