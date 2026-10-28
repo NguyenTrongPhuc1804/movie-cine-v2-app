@@ -29,6 +29,7 @@ import {
   useWindowDimensions,
   View,
 } from "react-native";
+import type { ScrollViewInstance } from "react-native";
 
 // Trả null khi không có phim để màn hình hiện "Không tìm thấy phim"
 async function loadDetail(slug: string) {
@@ -63,7 +64,7 @@ function FilmDetailContent({
   relatedFilms: Film[];
 }) {
   const { height } = useWindowDimensions();
-  const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<ScrollViewInstance>(null);
   // Vị trí khu Trailer, dùng cho nút "Trailer" cuộn xuống (thay cho href="#trailer" bên web)
   const [trailerY, setTrailerY] = useState(0);
 

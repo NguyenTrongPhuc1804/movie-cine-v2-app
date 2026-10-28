@@ -19,7 +19,11 @@ interface VideoPlayerProps {
 
 export default function VideoPlayer({ film, servers }: VideoPlayerProps) {
   const params = useLocalSearchParams<{ server?: string; tap?: string }>();
-  const [showAll, setShowAll] = useState(false);
+  // Trạng thái "xem tất cả" gắn với server hiện tại: đổi server thì tự thu gọn
+  const [expandState, setExpandState] = useState({
+    server: -1,
+    all: false,
+  });
 
   // Tham số sai (VD tap=999) thì tự đưa về giới hạn hợp lệ
   const serverIndex = clamp(
@@ -48,10 +52,10 @@ export default function VideoPlayer({ film, servers }: VideoPlayerProps) {
     });
   }, [film.slug, film.name, film.thumb_url, serverIndex, tap, currentEpisode]);
 
-  // Đổi server thì thu gọn lại danh sách tập
-  useEffect(() => {
-    setShowAll(false);
-  }, [serverIndex]);
+  // Đổi server thì danh sách tự thu gọn (state gắn theo server, không cần effect)
+  const showAll = expandState.server === serverIndex && expandState.all;
+  const toggleShowAll = () =>
+    setExpandState({ server: serverIndex, all: !showAll });
 
   const indexedEpisodes = episodes.map((episode, index) => ({
     episode,
@@ -164,7 +168,7 @@ export default function VideoPlayer({ film, servers }: VideoPlayerProps) {
 
         {isLongList && (
           <Pressable
-            onPress={() => setShowAll((prev) => !prev)}
+            onPress={toggleShowAll}
             className="mt-3 flex-row items-center justify-center gap-1 self-center rounded bg-gray-700 px-4 py-2 active:bg-red-700"
           >
             <Text className="text-sm font-bold text-white">

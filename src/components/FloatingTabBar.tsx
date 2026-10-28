@@ -3,6 +3,7 @@
 
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
+import type { BottomTabBarProps } from "expo-router/js-tabs";
 import { useEffect } from "react";
 import { Pressable, View } from "react-native";
 import Animated, {
@@ -35,30 +36,16 @@ const ICONS: Record<
   favorites: { active: "heart", idle: "heart-outline" },
 };
 
-type Props = {
-  state: {
-    index: number;
-    routes: { key: string; name: string; params?: object }[];
-  };
-  descriptors: Record<
-    string,
-    { options: { title?: string; tabBarLabel?: unknown } }
-  >;
-  navigation: {
-    emit: (event: {
-      type: string;
-      target: string;
-      canPreventDefault?: boolean;
-    }) => { defaultPrevented: boolean };
-    navigate: (name: string, params?: object) => void;
-  };
-  insets: { bottom: number };
-};
+type Props = Pick<
+  BottomTabBarProps,
+  "state" | "descriptors" | "emitter" | "navigateToTab" | "insets"
+>;
 
 export default function FloatingTabBar({
   state,
   descriptors,
-  navigation,
+  emitter,
+  navigateToTab,
   insets,
 }: Props) {
   return (
@@ -103,14 +90,14 @@ export default function FloatingTabBar({
           };
 
           const onPress = () => {
-            const event = navigation.emit({
+            const event = emitter.emit({
               type: "tabPress",
               target: route.key,
               canPreventDefault: true,
             });
             if (!focused && !event.defaultPrevented) {
               Haptics.selectionAsync().catch(() => undefined);
-              navigation.navigate(route.name, route.params);
+              navigateToTab(route.key);
             }
           };
 
@@ -122,7 +109,7 @@ export default function FloatingTabBar({
               icon={focused ? icons.active : icons.idle}
               onPress={onPress}
               onLongPress={() =>
-                navigation.emit({ type: "tabLongPress", target: route.key })
+                emitter.emit({ type: "tabLongPress", target: route.key })
               }
             />
           );

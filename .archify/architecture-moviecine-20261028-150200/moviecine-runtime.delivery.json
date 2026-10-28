@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "912a9030-150d-4ecf-9a28-410c4243f787",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "D:\\Source-code\\WEB\\FE\\MovieCineflexx\\moviecine-app\\.archify\\architecture-moviecine-20261028-150200\\candidate.json",
+  "output": "D:\\Source-code\\WEB\\FE\\MovieCineflexx\\moviecine-app\\.archify\\architecture-moviecine-20261028-150200\\moviecine-runtime.html",
+  "specification": {
+    "sha256": "4ffd528ef4ad666a1e2ad1a53689f7c33402f7cbe4822962a8ddb5cd4088ee49",
+    "bytes": 6246
+  },
+  "artifact": {
+    "sha256": "a61448fb3cf03769ad04526f234868d07bba52b9b20c7f71a496682ba90df775",
+    "bytes": 852501
+  }
+}

@@ -2,15 +2,12 @@
 
 import FloatingTabBar from "@/components/FloatingTabBar";
 import { Tabs } from "expo-router";
+import type { BottomTabBarProps } from "expo-router/js-tabs";
 
 export default function TabsLayout() {
   return (
     <Tabs
-      tabBar={(props) => (
-        <FloatingTabBar
-          {...(props as unknown as Parameters<typeof FloatingTabBar>[0])}
-        />
-      )}
+      tabBar={(props: BottomTabBarProps) => <FloatingTabBar {...props} />}
       screenOptions={{
         headerStyle: { backgroundColor: "#121212" },
         headerTintColor: "#ffffff",

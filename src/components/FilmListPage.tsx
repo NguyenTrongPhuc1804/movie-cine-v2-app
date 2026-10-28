@@ -78,7 +78,7 @@ export default function FilmListPage({ listKey, title, load, header, filterable 
       ListFooterComponent={
         data ? (
           <Pagination currentPage={data.pagination.currentPage} totalPages={data.pagination.totalPages} onChange={changePage} />
-        ) : null
+        ) : undefined
       }
     />
   );
